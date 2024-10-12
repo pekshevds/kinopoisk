@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.urls import reverse
 
 
 class Base(models.Model):
@@ -68,3 +69,6 @@ class Movie(Directory):
     class Meta:
         verbose_name = "Фильм"
         verbose_name_plural = "Фильмы"
+
+    def get_absolute_url(self) -> str:
+        return reverse("movie:item", kwargs={"id": self.id})
