@@ -7,7 +7,11 @@
         {% for movie in objects %}        
         <div class="col">
             <div class="card" style="width: 18rem;">
+                {% if movie.cover %}
                 <img src="{{ movie.cover.url }}" class="card-img-top" alt="{{ movie.name }}">
+                {% else %}
+                <img src="#" class="card-img-top" alt="{{ movie.name }}">
+                {% endif %}
                 <div class="card-body">
                 <h5 class="card-title">{{ movie.name }}<h5>                
                 <a href="{{ movie.get_absolute_url }}" class="btn btn-primary">Подробнее</a>

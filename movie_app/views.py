@@ -1,13 +1,61 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from django.views import View
 from movie_app.models import Movie, Genre
+from movie_app.services import fetch_values_for_filters, generate_filters
 
 
 class MovieListView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         genres = Genre.objects.all()
         objects = Movie.objects.all()
+        return render(
+            request,
+            template_name="movie_app/movie_list.html",
+            context={"genres": genres, "objects": objects, "title": "Список фильмов"},
+        )
+
+
+class MovieListViewByQuery(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        genres = Genre.objects.all()
+        query = request.GET.get("query")
+        objects = None
+        if query:
+            objects = Movie.objects.filter(
+                Q(description__icontains=query) | Q(name__icontains=query)
+            )
+        return render(
+            request,
+            template_name="movie_app/movie_list.html",
+            context={"genres": genres, "objects": objects, "title": "Список фильмов"},
+        )
+
+
+class MovieListViewFilter(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        genres = Genre.objects.all()
+        rates = {movie.rate for movie in Movie.objects.all()}
+        years = {movie.release for movie in Movie.objects.all()}
+        return render(
+            request,
+            template_name="movie_app/filter.html",
+            context={
+                "genres": genres,
+                "rates": rates,
+                "years": years,
+                "title": "Фильтры",
+            },
+        )
+
+
+class MovieListViewByFilter(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        genres = Genre.objects.all()
+        values_for_filters = fetch_values_for_filters(request.GET.items())
+        filters = generate_filters(values_for_filters)
+        objects = Movie.objects.filter(filters)
         return render(
             request,
             template_name="movie_app/movie_list.html",

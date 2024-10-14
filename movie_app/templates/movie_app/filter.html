@@ -1,0 +1,53 @@
+{% extends "movie_app\base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <form action="{% url 'movie:by-filter' %}" method="get">
+        {% csrf_token %}
+        <div class="row">
+        
+            <div class="col">
+                <h2>Жанры</h2>
+                {% for genre in genres %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked_{{ genre.id }}" name="genre_{{ genre.id }}">
+                    <label class="form-check-label" for="flexCheckChecked_{{ genre.id }}">
+                        {{ genre.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col">
+                <h2>Рейтинг</h2>
+                {% for rate in rates %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedRate_{{ rate }}" name="rate_{{ rate }}">
+                    <label class="form-check-label" for="flexCheckCheckedRate_{{ rate }}">
+                        {{ rate }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col">
+                <h2>Года</h2>
+                {% for year in years %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedYear_{{ year }}" name="year_{{ year }}">
+                    <label class="form-check-label" for="flexCheckCheckedYear_{{ year }}">
+                        {{ year }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary" type="submit">Отобрать</button>
+            </div>
+        </div>
+    </form>
+  </div>
+
+
+{% endblock %}

@@ -6,7 +6,12 @@
     <div class="row">                
         <div class="col">
             <div class="card" style="width: 18rem;">
+                {% if object.cover %}
                 <img src="{{ object.cover.url }}" class="card-img-top" alt="{{ object.name }}">
+                {% else %}
+                <img src="#" class="card-img-top" alt="{{ object.name }}">
+                {% endif %}
+                
                 <div class="card-body">
                 <h5 class="card-title">{{ object.name }}<h5>                
                 <p class="card-text">Жанр: {{ object.genre }}</p>
