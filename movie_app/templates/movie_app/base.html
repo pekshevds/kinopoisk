@@ -24,9 +24,11 @@
                             {% for genre in genres %}
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{% url 'movie:by-genre' id=genre.id %}">{{ genre.name }}</a>
-                              </li>
+                              </li>                              
                             {% endfor %}
+                            <a class="btn btn-primary" href="{% url 'movie:new-item' %}" role="button">Новый</a>
                           </ul>
+                        
                         <form class="d-flex" action="{% url 'movie:by-query' %}" method="GET">
                           {% csrf_token %}
                           <input id="query" name="query" class="form-control me-2" type="search" placeholder="Найти фильм" aria-label="Найти фильм">

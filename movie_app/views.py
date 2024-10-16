@@ -1,9 +1,10 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.views import View
 from movie_app.models import Movie, Genre
 from movie_app.services import fetch_values_for_filters, generate_filters
+from movie_app.forms import MovieForm
 
 
 class MovieListView(View):
@@ -75,6 +76,29 @@ class MovieListByGenreView(View):
         )
 
 
+class NewMovieView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(
+            request,
+            template_name="movie_app/new_movie.html",
+            context={
+                "genres": Genre.objects.all(),
+                "form": MovieForm(),
+                "title": "Новый товар",
+            },
+        )
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        form = MovieForm(request.POST, request.FILES)
+        if form.is_valid():
+            object = Movie.objects.create(**form.cleaned_data)
+            object.save()
+            return redirect(object.get_absolute_url())
+        return redirect(
+            "movie:new-item",
+        )
+
+
 class MovieView(View):
     def get(self, request: HttpRequest, id: str) -> HttpResponse:
         object = get_object_or_404(Movie, id=id)
@@ -84,7 +108,3 @@ class MovieView(View):
             template_name="movie_app/movie.html",
             context={"genres": genres, "object": object, "title": object.name},
         )
-
-
-class NewMovieView(View):
-    pass

@@ -3,6 +3,7 @@ from movie_app.views import (
     MovieListView,
     MovieListViewByQuery,
     MovieView,
+    NewMovieView,
     MovieListByGenreView,
     MovieListViewFilter,
     MovieListViewByFilter,
@@ -14,6 +15,7 @@ urlpatterns = [
     path("query-result/", MovieListViewByQuery.as_view(), name="by-query"),
     path("filter/", MovieListViewFilter.as_view(), name="filter"),
     path("filter-result/", MovieListViewByFilter.as_view(), name="by-filter"),
-    path("movie/<str:id>/", MovieView.as_view(), name="item"),
-    path("genre/<str:id>/", MovieListByGenreView.as_view(), name="by-genre"),
+    path("movie/item/<str:id>/", MovieView.as_view(), name="item"),
+    path("movie/new/", NewMovieView.as_view(), name="new-item"),
+    path("genre/item/<str:id>/", MovieListByGenreView.as_view(), name="by-genre"),
 ]
